@@ -1,0 +1,116 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "New room light",
+        "description": "Night light after sunset, optional auto light when it is dark, and the remembered normal state for manual use.",
+        "data": {
+          "name": "Name",
+          "light": "Light",
+          "lights": "Individual lights (optional)",
+          "occupancy_sensors": "Motion / presence sensors",
+          "night_brightness": "Night light brightness",
+          "night_kelvin": "Night light color temperature",
+          "night_off_delay": "Night light off after",
+          "illuminance_sensor": "Illuminance sensor (optional)",
+          "lux_threshold": "Dark below",
+          "auto_brightness": "Auto light brightness",
+          "auto_kelvin": "Auto light color temperature",
+          "auto_off_delay": "Auto light off after",
+          "quiet_entity": "Quiet hours switch (optional)",
+          "button_ieee": "Button: ZHA device IEEE (optional)",
+          "button_command": "Button command",
+          "transition": "Transition"
+        },
+        "data_description": {
+          "light": "The light (or group) that is watched and switched off.",
+          "lights": "Lights that are switched on and whose normal state is remembered. Empty = members of the group.",
+          "occupancy_sensors": "The room counts as occupied while any of them is on.",
+          "night_brightness": "After sunset. Decimals allowed (0.8 % = smallest visible level of many lamps).",
+          "illuminance_sensor": "Enables the auto light: during the day, motion switches the light on when it is dark.",
+          "quiet_entity": "While on, motion does not switch the light on.",
+          "button_ieee": "e.g. 00:17:88:01:0e:d5:1f:ec – the button toggles night light / normal / off.",
+          "button_command": "ZHA command of the button, e.g. off_press."
+        }
+      }
+    },
+    "error": {
+      "no_light": "Select a light.",
+      "no_occupancy": "Select at least one motion or presence sensor."
+    },
+    "abort": {
+      "already_configured": "This light is already set up."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Room light settings",
+        "data": {
+          "light": "Light",
+          "lights": "Individual lights (optional)",
+          "occupancy_sensors": "Motion / presence sensors",
+          "night_brightness": "Night light brightness",
+          "night_kelvin": "Night light color temperature",
+          "night_off_delay": "Night light off after",
+          "illuminance_sensor": "Illuminance sensor (optional)",
+          "lux_threshold": "Dark below",
+          "auto_brightness": "Auto light brightness",
+          "auto_kelvin": "Auto light color temperature",
+          "auto_off_delay": "Auto light off after",
+          "quiet_entity": "Quiet hours switch (optional)",
+          "button_ieee": "Button: ZHA device IEEE (optional)",
+          "button_command": "Button command",
+          "transition": "Transition"
+        },
+        "data_description": {
+          "light": "The light (or group) that is watched and switched off.",
+          "lights": "Lights that are switched on and whose normal state is remembered. Empty = members of the group.",
+          "occupancy_sensors": "The room counts as occupied while any of them is on.",
+          "night_brightness": "After sunset. Decimals allowed (0.8 % = smallest visible level of many lamps).",
+          "illuminance_sensor": "Enables the auto light: during the day, motion switches the light on when it is dark.",
+          "quiet_entity": "While on, motion does not switch the light on.",
+          "button_ieee": "e.g. 00:17:88:01:0e:d5:1f:ec – the button toggles night light / normal / off.",
+          "button_command": "ZHA command of the button, e.g. off_press."
+        }
+      }
+    },
+    "error": {
+      "no_light": "Select a light.",
+      "no_occupancy": "Select at least one motion or presence sensor."
+    }
+  },
+  "entity": {
+    "select": {
+      "mode": {
+        "name": "Mode",
+        "state": {
+          "off": "Off",
+          "night": "Night light",
+          "auto": "Auto",
+          "manual": "Manual"
+        },
+        "state_attributes": {
+          "reason": {
+            "name": "Reason",
+            "state": {
+              "motion_at_night": "Motion at night",
+              "motion_in_dark": "Motion in the dark",
+              "no_motion": "No motion",
+              "button": "Button",
+              "switched_off_outside": "Switched off elsewhere",
+              "switched_on_outside": "Switched on elsewhere",
+              "selected": "Selected",
+              "restart": "Restart"
+            }
+          }
+        }
+      }
+    },
+    "switch": {
+      "motion": {
+        "name": "Motion control"
+      }
+    }
+  }
+}

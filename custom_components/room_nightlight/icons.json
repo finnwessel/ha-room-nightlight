@@ -1,0 +1,21 @@
+{
+  "entity": {
+    "select": {
+      "mode": {
+        "default": "mdi:lightbulb-auto",
+        "state": {
+          "off": "mdi:lightbulb-off-outline",
+          "night": "mdi:weather-night",
+          "auto": "mdi:motion-sensor",
+          "manual": "mdi:lightbulb-on"
+        }
+      }
+    },
+    "switch": {
+      "motion": {
+        "default": "mdi:motion-sensor",
+        "state": { "off": "mdi:motion-sensor-off" }
+      }
+    }
+  }
+}

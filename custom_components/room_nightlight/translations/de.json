@@ -1,0 +1,116 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Neues Raumlicht",
+        "description": "Nachtlicht nach Sonnenuntergang, optional Automatik bei Dunkelheit, und der gemerkte Normalzustand für manuelle Nutzung.",
+        "data": {
+          "name": "Name",
+          "light": "Licht",
+          "lights": "Einzelne Lampen (optional)",
+          "occupancy_sensors": "Bewegungs-/Präsenzmelder",
+          "night_brightness": "Nachtlicht-Helligkeit",
+          "night_kelvin": "Nachtlicht-Farbtemperatur",
+          "night_off_delay": "Nachtlicht aus nach",
+          "illuminance_sensor": "Helligkeitssensor (optional)",
+          "lux_threshold": "Dunkel unter",
+          "auto_brightness": "Automatik-Helligkeit",
+          "auto_kelvin": "Automatik-Farbtemperatur",
+          "auto_off_delay": "Automatik aus nach",
+          "quiet_entity": "Nachtruhe-Schalter (optional)",
+          "button_ieee": "Taste: ZHA-Geräte-IEEE (optional)",
+          "button_command": "Tasten-Befehl",
+          "transition": "Übergang"
+        },
+        "data_description": {
+          "light": "Das Licht (oder die Gruppe), das beobachtet und ausgeschaltet wird.",
+          "lights": "Lampen, die eingeschaltet werden und deren Normalzustand gemerkt wird. Leer = Mitglieder der Gruppe.",
+          "occupancy_sensors": "Der Raum gilt als belegt, solange einer davon an ist.",
+          "night_brightness": "Nach Sonnenuntergang. Nachkommastellen erlaubt (0,8 % = kleinste sichtbare Stufe vieler Lampen).",
+          "illuminance_sensor": "Aktiviert die Automatik: tagsüber schaltet Bewegung das Licht ein, wenn es dunkel ist.",
+          "quiet_entity": "Solange an, schaltet Bewegung das Licht nicht ein.",
+          "button_ieee": "z. B. 00:17:88:01:0e:d5:1f:ec – die Taste schaltet Nachtlicht / Normal / Aus.",
+          "button_command": "ZHA-Befehl der Taste, z. B. off_press."
+        }
+      }
+    },
+    "error": {
+      "no_light": "Licht auswählen.",
+      "no_occupancy": "Mindestens einen Bewegungs- oder Präsenzmelder auswählen."
+    },
+    "abort": {
+      "already_configured": "Dieses Licht ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Raumlicht-Einstellungen",
+        "data": {
+          "light": "Licht",
+          "lights": "Einzelne Lampen (optional)",
+          "occupancy_sensors": "Bewegungs-/Präsenzmelder",
+          "night_brightness": "Nachtlicht-Helligkeit",
+          "night_kelvin": "Nachtlicht-Farbtemperatur",
+          "night_off_delay": "Nachtlicht aus nach",
+          "illuminance_sensor": "Helligkeitssensor (optional)",
+          "lux_threshold": "Dunkel unter",
+          "auto_brightness": "Automatik-Helligkeit",
+          "auto_kelvin": "Automatik-Farbtemperatur",
+          "auto_off_delay": "Automatik aus nach",
+          "quiet_entity": "Nachtruhe-Schalter (optional)",
+          "button_ieee": "Taste: ZHA-Geräte-IEEE (optional)",
+          "button_command": "Tasten-Befehl",
+          "transition": "Übergang"
+        },
+        "data_description": {
+          "light": "Das Licht (oder die Gruppe), das beobachtet und ausgeschaltet wird.",
+          "lights": "Lampen, die eingeschaltet werden und deren Normalzustand gemerkt wird. Leer = Mitglieder der Gruppe.",
+          "occupancy_sensors": "Der Raum gilt als belegt, solange einer davon an ist.",
+          "night_brightness": "Nach Sonnenuntergang. Nachkommastellen erlaubt (0,8 % = kleinste sichtbare Stufe vieler Lampen).",
+          "illuminance_sensor": "Aktiviert die Automatik: tagsüber schaltet Bewegung das Licht ein, wenn es dunkel ist.",
+          "quiet_entity": "Solange an, schaltet Bewegung das Licht nicht ein.",
+          "button_ieee": "z. B. 00:17:88:01:0e:d5:1f:ec – die Taste schaltet Nachtlicht / Normal / Aus.",
+          "button_command": "ZHA-Befehl der Taste, z. B. off_press."
+        }
+      }
+    },
+    "error": {
+      "no_light": "Licht auswählen.",
+      "no_occupancy": "Mindestens einen Bewegungs- oder Präsenzmelder auswählen."
+    }
+  },
+  "entity": {
+    "select": {
+      "mode": {
+        "name": "Modus",
+        "state": {
+          "off": "Aus",
+          "night": "Nachtlicht",
+          "auto": "Automatik",
+          "manual": "Manuell"
+        },
+        "state_attributes": {
+          "reason": {
+            "name": "Grund",
+            "state": {
+              "motion_at_night": "Bewegung nachts",
+              "motion_in_dark": "Bewegung bei Dunkelheit",
+              "no_motion": "Keine Bewegung",
+              "button": "Taste",
+              "switched_off_outside": "Von außen ausgeschaltet",
+              "switched_on_outside": "Von außen eingeschaltet",
+              "selected": "Ausgewählt",
+              "restart": "Neustart"
+            }
+          }
+        }
+      }
+    },
+    "switch": {
+      "motion": {
+        "name": "Bewegungssteuerung"
+      }
+    }
+  }
+}
