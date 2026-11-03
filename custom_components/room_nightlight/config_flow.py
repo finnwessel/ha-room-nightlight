@@ -24,6 +24,7 @@ from .const import (
     CONF_LUX_THRESHOLD,
     CONF_NAME,
     CONF_NIGHT_BRIGHTNESS,
+    CONF_NIGHT_ENTITY,
     CONF_NIGHT_KELVIN,
     CONF_NIGHT_OFF_DELAY,
     CONF_OCCUPANCY,
@@ -33,7 +34,7 @@ from .const import (
     DOMAIN,
 )
 
-OPTIONAL_KEYS = (CONF_LIGHTS, CONF_ILLUMINANCE, CONF_QUIET, CONF_BUTTON_IEEE)
+OPTIONAL_KEYS = (CONF_LIGHTS, CONF_ILLUMINANCE, CONF_QUIET, CONF_NIGHT_ENTITY, CONF_BUTTON_IEEE)
 
 
 def _number(minimum: float, maximum: float, step: float, unit: str | None = None) -> selector.NumberSelector:
@@ -45,7 +46,7 @@ def _number(minimum: float, maximum: float, step: float, unit: str | None = None
     return selector.NumberSelector(config)
 
 
-def _entities(domain: str, *device_classes: str, multiple: bool = False) -> selector.EntitySelector:
+def _entities(domain: str | list[str], *device_classes: str, multiple: bool = False) -> selector.EntitySelector:
     flt = selector.EntityFilterSelectorConfig(domain=domain)
     if device_classes:
         flt["device_class"] = [str(d) for d in device_classes]
@@ -87,6 +88,7 @@ def _schema(defaults: dict[str, Any], with_name: bool) -> vol.Schema:
         req(CONF_AUTO_KELVIN): _number(2000, 6500, 100, "K"),
         req(CONF_AUTO_OFF_DELAY): _number(0.5, 60, 0.5, "min"),
         opt(CONF_QUIET): _entities("input_boolean"),
+        opt(CONF_NIGHT_ENTITY): _entities(["input_boolean", "binary_sensor", "schedule"]),
         opt(CONF_BUTTON_IEEE): str,
         req(CONF_BUTTON_COMMAND): str,
         req(CONF_TRANSITION): _number(0, 10, 0.5, "s"),

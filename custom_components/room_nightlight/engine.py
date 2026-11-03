@@ -7,12 +7,17 @@ and executes the returned decision.
 Modes::
 
     off ──occupied, night──────────────▶ night ──vacant night_off_delay──▶ off
-    off ──occupied, day, dark (lux)────▶ auto  ──vacant auto_off_delay───▶ off
+    off ──occupied, not night, dark────▶ auto  ──vacant auto_off_delay───▶ off
     off ──button / switched on outside─▶ manual (restores the saved normal state)
     night/auto ──button────────────────▶ manual
     manual ──button, occupied at night─▶ night
     manual ──button────────────────────▶ off
+    night/auto ──dimmed outside────────▶ manual (keeps the new level)
     any ──switched off outside─────────▶ off
+
+"Night" is the sun below the horizon, or a configured night entity (e.g. a
+quiet-hours switch). "Dark" is the sun below the horizon or the lux sensor
+under its threshold, so with a night entity the evening gets the auto level.
 
 The mode is always changed *before* the light action, so the light's own
 state change caused by the action never looks like an outside change.
@@ -49,10 +54,11 @@ class Env:
     lux_threshold: float | None = None
     quiet: bool = False  # e.g. everyone asleep: motion does not switch on
     motion_enabled: bool = True
+    sun_down: bool = False
 
     @property
     def dark(self) -> bool:
-        return (
+        return self.sun_down or (
             self.lux is not None
             and self.lux_threshold is not None
             and self.lux < self.lux_threshold
@@ -106,6 +112,13 @@ def on_light_external(mode: Mode, is_on: bool) -> Decision:
         return Decision(Mode.OFF, None, "switched_off_outside")
     if is_on and mode is Mode.OFF:
         return Decision(Mode.MANUAL, None, "switched_on_outside")
+    return NOTHING
+
+
+def on_light_adjusted(mode: Mode) -> Decision:
+    """Brightness or colour was changed by someone else while the light was on."""
+    if mode in (Mode.NIGHT, Mode.AUTO):
+        return Decision(Mode.MANUAL, None, "adjusted_outside")
     return NOTHING
 
 

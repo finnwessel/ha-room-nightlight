@@ -7,6 +7,7 @@ from custom_components.room_nightlight.engine import (
     Env,
     Mode,
     on_button,
+    on_light_adjusted,
     on_light_external,
     on_mode_selected,
     on_occupied,
@@ -101,3 +102,30 @@ def test_kitchen_night_scenario():
     assert on_vacant(mode, Mode.NIGHT) is NOTHING
     d = on_button(mode, env(light_on=True, occupied=False))
     assert d == Decision(Mode.OFF, Action.TURN_OFF, "button")
+
+
+# --- night entity (quiet hours instead of sunset) -------------------------------
+
+
+def test_evening_with_night_entity_gets_auto_level():
+    evening = env(is_night=False, sun_down=True)
+    assert on_occupied(Mode.OFF, evening) == Decision(Mode.AUTO, Action.AUTO_ON, "motion_in_dark")
+    # sun down counts as dark even when the lux sensor still reads the old value
+    assert on_occupied(Mode.OFF, env(is_night=False, sun_down=True, lux=35, lux_threshold=25)).mode is Mode.AUTO
+    assert on_occupied(Mode.OFF, env(is_night=True, sun_down=True)).mode is Mode.NIGHT
+
+
+def test_quiet_hours_still_block_motion_at_night():
+    assert on_occupied(Mode.OFF, env(is_night=True, sun_down=True, quiet=True)) is NOTHING
+
+
+# --- dimmed by someone else --------------------------------------------------------
+
+
+def test_dimming_automatic_light_makes_it_manual():
+    assert on_light_adjusted(Mode.NIGHT) == Decision(Mode.MANUAL, None, "adjusted_outside")
+    assert on_light_adjusted(Mode.AUTO).mode is Mode.MANUAL
+    assert on_light_adjusted(Mode.MANUAL) is NOTHING
+    assert on_light_adjusted(Mode.OFF) is NOTHING
+    # once manual, the no-motion timers leave it alone
+    assert on_vacant(Mode.MANUAL, Mode.AUTO) is NOTHING

@@ -9,15 +9,17 @@ Jedes Licht hat einen **Modus**:
 | Modus | Wann | Was passiert |
 |---|---|---|
 | **Aus** | Licht ist aus | Bewegung kann es einschalten |
-| **Nachtlicht** | Bewegung nach Sonnenuntergang | z. B. 10 % / 2000 K; aus nach 1 Min ohne Bewegung |
-| **Automatik** | Bewegung tagsüber bei Dunkelheit (nur mit Helligkeitssensor) | z. B. 40 % / 2700 K; aus nach 2 Min ohne Bewegung |
+| **Nachtlicht** | Bewegung nachts (nach Sonnenuntergang oder solange der Nacht-Schalter an ist) | z. B. 10 % / 2000 K; aus nach 1 Min ohne Bewegung |
+| **Automatik** | Bewegung bei Dunkelheit, wenn nicht Nacht ist (Helligkeitssensor unter Schwelle oder Sonne unter dem Horizont) | z. B. 40 % / 2700 K; aus nach 2 Min ohne Bewegung |
 | **Manuell** | Taste, App, Sprache, Szene | Normalzustand; wird **nie** automatisch ausgeschaltet |
 
 - **Taste** (ZHA, z. B. Hue-Dimmschalter): Nachtlicht/Automatik → Manuell, Manuell → Nachtlicht (wenn nachts und jemand da) bzw. Aus, Aus → Manuell.
 - **Von außen geschaltet:** Wird das Licht ausgeschaltet, wechselt der Modus auf Aus. Wird es aus dem Aus eingeschaltet, wechselt er auf Manuell.
+- **Von außen gedimmt:** Wird Helligkeit oder Farbtemperatur im Nachtlicht/Automatik geändert (Dimmschalter, App, Sprache), wechselt der Modus auf Manuell und das Licht bleibt an. Meldungen bis 5 s nach einer eigenen Schaltung zählen nicht.
 - **Normalzustand:** Änderungen im Modus Manuell (Helligkeit, Farbtemperatur, RGB, WLED-Effekt) werden pro Lampe gemerkt und beim nächsten Manuell wiederhergestellt. Lampen, die dabei aus waren, bleiben aus.
 - **WLED:** Lampen mit dem Effekt „Solid“ bekommen ihn beim Nachtlicht gesetzt, damit kein Effekt weiterläuft.
-- **Nachtruhe** (optional): Solange der Schalter an ist, schaltet Bewegung nichts ein.
+- **Nacht-Schalter** (optional, `input_boolean`/`binary_sensor`/`schedule`): Bestimmt statt des Sonnenuntergangs, wann Nacht ist. Abends vor der Nacht gilt dann Automatik.
+- **Nachtruhe** (optional): Solange der Schalter an ist, schaltet Bewegung nichts ein. Kann derselbe Schalter wie der Nacht-Schalter sein.
 - **Eigene Schaltungen** zählen nicht als „von außen“: Der Modus wird vor der Lichtaktion gesetzt, eigene Aufrufe tragen einen eigenen Kontext.
 
 ## Entitäten je Licht

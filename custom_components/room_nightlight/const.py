@@ -13,6 +13,7 @@ CONF_OCCUPANCY: Final = "occupancy_sensors"
 CONF_ILLUMINANCE: Final = "illuminance_sensor"
 CONF_LUX_THRESHOLD: Final = "lux_threshold"
 CONF_QUIET: Final = "quiet_entity"
+CONF_NIGHT_ENTITY: Final = "night_entity"
 CONF_BUTTON_IEEE: Final = "button_ieee"
 CONF_BUTTON_COMMAND: Final = "button_command"
 CONF_NIGHT_BRIGHTNESS: Final = "night_brightness"
@@ -39,5 +40,8 @@ STORAGE_VERSION: Final = 1
 SAVE_DELAY_SECONDS: Final = 5
 MEMORY_SETTLE_SECONDS: Final = 3  # manual mode must be this old before saving
 MEMORY_DEBOUNCE_SECONDS: Final = 2  # wait for slider movements to end
+ADJUST_SETTLE_SECONDS: Final = 5  # late reports after our own switching are no adjustment
+ADJUST_MIN_BRIGHTNESS: Final = 3  # of 255: smaller differences are rounding, not dimming
+ADJUST_MIN_KELVIN: Final = 100
 
 EVENT_MODE_CHANGED: Final = f"{DOMAIN}_mode_changed"

@@ -20,7 +20,9 @@ from custom_components.room_nightlight.const import (
     CONF_LIGHT,
     CONF_LIGHTS,
     CONF_NAME,
+    CONF_NIGHT_ENTITY,
     CONF_OCCUPANCY,
+    CONF_QUIET,
     DOMAIN,
 )
 
@@ -152,3 +154,61 @@ async def test_motion_switch_pauses_automation(hass: HomeAssistant) -> None:
     hass.states.async_set(MOTION, "on", {"device_class": "occupancy"})
     await hass.async_block_till_done()
     assert hass.states.get(_mode_entity(hass, entry)).state == "off"
+
+
+async def test_evening_in_the_hallway(hass: HomeAssistant, freezer: FrozenDateTimeFactory) -> None:
+    """Night switch decides the night: evening gets the auto level; dimming makes it manual."""
+    _states(hass)
+    hass.states.async_set("input_boolean.quiet_hours", "off")
+    turn_on = async_mock_service(hass, "light", "turn_on")
+    turn_off = async_mock_service(hass, "light", "turn_off")
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title="Hallway",
+        data={CONF_NAME: "Hallway"},
+        options={
+            CONF_LIGHT: LIGHT,
+            CONF_OCCUPANCY: [MOTION],
+            CONF_NIGHT_ENTITY: "input_boolean.quiet_hours",
+            CONF_QUIET: "input_boolean.quiet_hours",
+            "auto_brightness": 70.0,
+        },
+    )
+    entry.add_to_hass(hass)
+    assert await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+    mode = _mode_entity(hass, entry)
+
+    # Sun is down, quiet hours off → auto level, not the night light
+    hass.states.async_set(MOTION, "on", {"device_class": "occupancy"})
+    await hass.async_block_till_done()
+    assert hass.states.get(mode).state == "auto"
+    assert turn_on[-1].data["brightness"] == 178
+
+    # Late reports right after our own switching are no adjustment
+    hass.states.async_set(LIGHT, "on", {"brightness": 100})
+    await hass.async_block_till_done()
+    hass.states.async_set(LIGHT, "on", {"brightness": 178})
+    await hass.async_block_till_done()
+    assert hass.states.get(mode).state == "auto"
+
+    # Dimmed up on the wall switch → manual, and it stays on after leaving
+    freezer.tick(timedelta(seconds=10))
+    hass.states.async_set(LIGHT, "on", {"brightness": 230})
+    await hass.async_block_till_done()
+    assert hass.states.get(mode).state == "manual"
+    hass.states.async_set(MOTION, "off", {"device_class": "occupancy"})
+    await hass.async_block_till_done()
+    freezer.tick(timedelta(minutes=5))
+    async_fire_time_changed(hass)
+    await hass.async_block_till_done()
+    assert hass.states.get(mode).state == "manual"
+    assert not turn_off
+
+    # Quiet hours: motion switches nothing on
+    hass.states.async_set(LIGHT, "off")
+    await hass.async_block_till_done()
+    hass.states.async_set("input_boolean.quiet_hours", "on")
+    hass.states.async_set(MOTION, "on", {"device_class": "occupancy"})
+    await hass.async_block_till_done()
+    assert hass.states.get(mode).state == "off"

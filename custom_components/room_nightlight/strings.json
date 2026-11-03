@@ -18,6 +18,7 @@
           "auto_kelvin": "Auto light color temperature",
           "auto_off_delay": "Auto light off after",
           "quiet_entity": "Quiet hours switch (optional)",
+          "night_entity": "Night switch (optional)",
           "button_ieee": "Button: ZHA device IEEE (optional)",
           "button_command": "Button command",
           "transition": "Transition"
@@ -26,9 +27,10 @@
           "light": "The light (or group) that is watched and switched off.",
           "lights": "Lights that are switched on and whose normal state is remembered. Empty = members of the group.",
           "occupancy_sensors": "The room counts as occupied while any of them is on.",
-          "night_brightness": "After sunset. Decimals allowed (0.8 % = smallest visible level of many lamps).",
+          "night_brightness": "At night (sunset or night switch). Decimals allowed (0.8 % = lowest visible level of many lamps).",
           "illuminance_sensor": "Enables the auto light: during the day, motion switches the light on when it is dark.",
           "quiet_entity": "While on, motion does not switch the light on.",
+          "night_entity": "While on, it counts as night (night light). Empty = after sunset. With a switch, the evening gets the auto brightness.",
           "button_ieee": "e.g. 00:17:88:01:0e:d5:1f:ec – the button toggles night light / normal / off.",
           "button_command": "ZHA command of the button, e.g. off_press."
         }
@@ -59,6 +61,7 @@
           "auto_kelvin": "Auto light color temperature",
           "auto_off_delay": "Auto light off after",
           "quiet_entity": "Quiet hours switch (optional)",
+          "night_entity": "Night switch (optional)",
           "button_ieee": "Button: ZHA device IEEE (optional)",
           "button_command": "Button command",
           "transition": "Transition"
@@ -67,9 +70,10 @@
           "light": "The light (or group) that is watched and switched off.",
           "lights": "Lights that are switched on and whose normal state is remembered. Empty = members of the group.",
           "occupancy_sensors": "The room counts as occupied while any of them is on.",
-          "night_brightness": "After sunset. Decimals allowed (0.8 % = smallest visible level of many lamps).",
+          "night_brightness": "At night (sunset or night switch). Decimals allowed (0.8 % = lowest visible level of many lamps).",
           "illuminance_sensor": "Enables the auto light: during the day, motion switches the light on when it is dark.",
           "quiet_entity": "While on, motion does not switch the light on.",
+          "night_entity": "While on, it counts as night (night light). Empty = after sunset. With a switch, the evening gets the auto brightness.",
           "button_ieee": "e.g. 00:17:88:01:0e:d5:1f:ec – the button toggles night light / normal / off.",
           "button_command": "ZHA command of the button, e.g. off_press."
         }
@@ -101,7 +105,8 @@
               "switched_off_outside": "Switched off elsewhere",
               "switched_on_outside": "Switched on elsewhere",
               "selected": "Selected",
-              "restart": "Restart"
+              "restart": "Restart",
+              "adjusted_outside": "Dimmed outside"
             }
           }
         }

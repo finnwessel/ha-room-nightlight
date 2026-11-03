@@ -23,6 +23,9 @@ from homeassistant.helpers.storage import Store
 from homeassistant.util import dt as dt_util
 
 from .const import (
+    ADJUST_MIN_BRIGHTNESS,
+    ADJUST_MIN_KELVIN,
+    ADJUST_SETTLE_SECONDS,
     CONF_AUTO_BRIGHTNESS,
     CONF_AUTO_KELVIN,
     CONF_AUTO_OFF_DELAY,
@@ -34,6 +37,7 @@ from .const import (
     CONF_LUX_THRESHOLD,
     CONF_NAME,
     CONF_NIGHT_BRIGHTNESS,
+    CONF_NIGHT_ENTITY,
     CONF_NIGHT_KELVIN,
     CONF_NIGHT_OFF_DELAY,
     CONF_OCCUPANCY,
@@ -53,6 +57,7 @@ from .engine import (
     Env,
     Mode,
     on_button,
+    on_light_adjusted,
     on_light_external,
     on_mode_selected,
     on_occupied,
@@ -78,6 +83,7 @@ class RoomLightController:
         self.illuminance: str | None = opt.get(CONF_ILLUMINANCE)
         self.lux_threshold = float(opt[CONF_LUX_THRESHOLD])
         self.quiet_entity: str | None = opt.get(CONF_QUIET)
+        self.night_entity: str | None = opt.get(CONF_NIGHT_ENTITY)
         self.button_ieee: str | None = (opt.get(CONF_BUTTON_IEEE) or "").strip().lower() or None
         self.button_command: str = opt[CONF_BUTTON_COMMAND]
         self.night_brightness = percent_to_brightness(float(opt[CONF_NIGHT_BRIGHTNESS]))
@@ -98,6 +104,7 @@ class RoomLightController:
             hass, STORAGE_VERSION, f"{DOMAIN}.{entry.entry_id}"
         )
         self._own: deque[str] = deque(maxlen=32)
+        self._last_own = 0.0
         self._listeners: list[Callable[[], None]] = []
         self._unsubs: list[CALLBACK_TYPE] = []
         self._vacancy_timers: list[CALLBACK_TYPE] = []
@@ -194,7 +201,10 @@ class RoomLightController:
         if new is None or new.state not in ("on", "off"):
             return
         if old is not None and old.state == new.state:
-            # Attribute change only (brightness, color): may be a new normal state.
+            # Attribute change only (brightness, color): may be a new normal state,
+            # or someone dimmed the automatic light, which makes it theirs.
+            if new.state == STATE_ON and self._adjusted_outside(event):
+                await self._apply(on_light_adjusted(self.mode))
             self._on_member_light(event)
             return
         if old is None or old.state not in ("on", "off"):
@@ -290,6 +300,7 @@ class RoomLightController:
 
         context = Context()
         self._own.append(context.id)
+        self._last_own = dt_util.utcnow().timestamp()
         for service, entity_id, data in calls:
             try:
                 await self.hass.services.async_call(
@@ -308,6 +319,27 @@ class RoomLightController:
         ctx = event.context
         return ctx.id in self._own or (ctx.parent_id is not None and ctx.parent_id in self._own)
 
+    def _adjusted_outside(self, event: Event[EventStateChangedData]) -> bool:
+        """A real brightness/colour change by someone else, not a late report of ours."""
+        if self.mode not in (Mode.NIGHT, Mode.AUTO) or self._is_own(event):
+            return False
+        if dt_util.utcnow().timestamp() - self._last_own < ADJUST_SETTLE_SECONDS:
+            return False
+        old, new = event.data["old_state"].attributes, event.data["new_state"].attributes
+
+        def moved(key: str, minimum: float) -> bool:
+            a, b = old.get(key), new.get(key)
+            if a is None or b is None:
+                return False
+            try:
+                return abs(float(a) - float(b)) >= minimum
+            except (TypeError, ValueError):
+                return False
+
+        return moved("brightness", ADJUST_MIN_BRIGHTNESS) or moved(
+            "color_temp_kelvin", ADJUST_MIN_KELVIN
+        )
+
     def _occupied(self) -> bool:
         return any(self.hass.states.is_state(e, STATE_ON) for e in self.occupancy)
 
@@ -315,6 +347,7 @@ class RoomLightController:
         return self.hass.states.is_state(self.light, STATE_ON)
 
     def _env(self) -> Env:
+        sun_down = self.hass.states.is_state("sun.sun", "below_horizon")
         lux = None
         if self.illuminance and (state := self.hass.states.get(self.illuminance)):
             try:
@@ -324,7 +357,12 @@ class RoomLightController:
         return Env(
             occupied=self._occupied(),
             light_on=self._light_on(),
-            is_night=self.hass.states.is_state("sun.sun", "below_horizon"),
+            is_night=(
+                self.hass.states.is_state(self.night_entity, STATE_ON)
+                if self.night_entity
+                else sun_down
+            ),
+            sun_down=sun_down,
             lux=lux,
             lux_threshold=self.lux_threshold if self.illuminance else None,
             quiet=bool(self.quiet_entity) and self.hass.states.is_state(self.quiet_entity, STATE_ON),
