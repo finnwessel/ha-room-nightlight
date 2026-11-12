@@ -71,3 +71,15 @@ def test_percent_to_brightness():
     assert percent_to_brightness(10) == 26
     assert percent_to_brightness(0) == 1
     assert percent_to_brightness(100) == 255
+
+
+def test_restore_calls_with_fixed_brightness():
+    saved = {
+        DESK: {"on": True, "brightness": 112, "color_temp_kelvin": 4000},
+        WLED: {"on": False},
+    }
+    assert restore_calls(saved, [DESK, WLED], EFFECTS, 0, brightness=255) == [
+        ("turn_on", DESK, {"brightness": 255, "color_temp_kelvin": 4000}),
+        ("turn_off", WLED, {}),
+    ]
+    assert restore_calls({}, [DESK], {}, 0, brightness=128)[0][2]["brightness"] == 128

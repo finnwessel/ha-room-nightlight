@@ -21,7 +21,8 @@
           "night_entity": "Nacht-Schalter (optional)",
           "button_ieee": "Taste: ZHA-Geräte-IEEE (optional)",
           "button_command": "Tasten-Befehl",
-          "transition": "Übergang"
+          "transition": "Übergang",
+          "button_brightness": "Tasten-Helligkeit (optional)"
         },
         "data_description": {
           "light": "Das Licht (oder die Gruppe), das beobachtet und ausgeschaltet wird.",
@@ -32,7 +33,8 @@
           "quiet_entity": "Solange an, schaltet Bewegung das Licht nicht ein.",
           "night_entity": "Solange an, gilt es als Nacht (Nachtlicht). Leer = nach Sonnenuntergang. Mit Schalter bekommt der Abend die Automatik-Helligkeit.",
           "button_ieee": "z. B. 00:17:88:01:0e:d5:1f:ec – die Taste schaltet Nachtlicht / Normal / Aus.",
-          "button_command": "ZHA-Befehl der Taste, z. B. off_press."
+          "button_command": "ZHA-Befehl der Taste, z. B. off_press.",
+          "button_brightness": "Feste Helligkeit, wenn die Taste das Licht einschaltet. Leer = letzten Normalzustand wiederherstellen."
         }
       }
     },
@@ -64,7 +66,8 @@
           "night_entity": "Nacht-Schalter (optional)",
           "button_ieee": "Taste: ZHA-Geräte-IEEE (optional)",
           "button_command": "Tasten-Befehl",
-          "transition": "Übergang"
+          "transition": "Übergang",
+          "button_brightness": "Tasten-Helligkeit (optional)"
         },
         "data_description": {
           "light": "Das Licht (oder die Gruppe), das beobachtet und ausgeschaltet wird.",
@@ -75,7 +78,8 @@
           "quiet_entity": "Solange an, schaltet Bewegung das Licht nicht ein.",
           "night_entity": "Solange an, gilt es als Nacht (Nachtlicht). Leer = nach Sonnenuntergang. Mit Schalter bekommt der Abend die Automatik-Helligkeit.",
           "button_ieee": "z. B. 00:17:88:01:0e:d5:1f:ec – die Taste schaltet Nachtlicht / Normal / Aus.",
-          "button_command": "ZHA-Befehl der Taste, z. B. off_press."
+          "button_command": "ZHA-Befehl der Taste, z. B. off_press.",
+          "button_brightness": "Feste Helligkeit, wenn die Taste das Licht einschaltet. Leer = letzten Normalzustand wiederherstellen."
         }
       }
     },

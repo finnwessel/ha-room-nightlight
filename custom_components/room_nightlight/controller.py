@@ -29,6 +29,7 @@ from .const import (
     CONF_AUTO_BRIGHTNESS,
     CONF_AUTO_KELVIN,
     CONF_AUTO_OFF_DELAY,
+    CONF_BUTTON_BRIGHTNESS,
     CONF_BUTTON_COMMAND,
     CONF_BUTTON_IEEE,
     CONF_ILLUMINANCE,
@@ -86,6 +87,11 @@ class RoomLightController:
         self.night_entity: str | None = opt.get(CONF_NIGHT_ENTITY)
         self.button_ieee: str | None = (opt.get(CONF_BUTTON_IEEE) or "").strip().lower() or None
         self.button_command: str = opt[CONF_BUTTON_COMMAND]
+        self.button_brightness: int | None = (
+            percent_to_brightness(float(opt[CONF_BUTTON_BRIGHTNESS]))
+            if opt.get(CONF_BUTTON_BRIGHTNESS)
+            else None
+        )
         self.night_brightness = percent_to_brightness(float(opt[CONF_NIGHT_BRIGHTNESS]))
         self.night_kelvin = int(opt[CONF_NIGHT_KELVIN])
         self.auto_brightness = percent_to_brightness(float(opt[CONF_AUTO_BRIGHTNESS]))
@@ -282,9 +288,9 @@ class RoomLightController:
             self._save()
             self._notify()
         if decision.action is not None:
-            await self._run(decision.action)
+            await self._run(decision.action, decision.reason)
 
-    async def _run(self, action: Action) -> None:
+    async def _run(self, action: Action, reason: str = "") -> None:
         effects = {
             eid: list((s.attributes.get("effect_list") or []) if (s := self.hass.states.get(eid)) else [])
             for eid in self.lights
@@ -294,7 +300,9 @@ class RoomLightController:
         elif action is Action.AUTO_ON:
             calls = level_calls(self.lights, self.auto_brightness, self.auto_kelvin, effects, self.transition)
         elif action is Action.RESTORE:
-            calls = restore_calls(self.normal, self.lights, effects, self.transition)
+            # The button can switch on at a fixed level instead of the saved one.
+            brightness = self.button_brightness if reason == "button" else None
+            calls = restore_calls(self.normal, self.lights, effects, self.transition, brightness)
         else:
             calls = [("turn_off", self.light, {"transition": self.transition} if self.transition else {})]
 

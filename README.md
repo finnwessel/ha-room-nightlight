@@ -14,6 +14,7 @@ Jedes Licht hat einen **Modus**:
 | **Manuell** | Taste, App, Sprache, Szene | Normalzustand; wird **nie** automatisch ausgeschaltet |
 
 - **Taste** (ZHA, z. B. Hue-Dimmschalter): Nachtlicht/Automatik → Manuell, Manuell → Nachtlicht (wenn nachts und jemand da) bzw. Aus, Aus → Manuell.
+- **Tasten-Helligkeit** (optional): Schaltet die Taste auf Manuell, kommt das Licht mit dieser festen Helligkeit (z. B. 100 %) statt mit der gemerkten. Farbe und Farbtemperatur bleiben wie gemerkt. App, Sprache und Modus-Auswahl stellen weiter den Normalzustand her.
 - **Von außen geschaltet:** Wird das Licht ausgeschaltet, wechselt der Modus auf Aus. Wird es aus dem Aus eingeschaltet, wechselt er auf Manuell.
 - **Von außen gedimmt:** Wird Helligkeit oder Farbtemperatur im Nachtlicht/Automatik geändert (Dimmschalter, App, Sprache), wechselt der Modus auf Manuell und das Licht bleibt an. Meldungen bis 5 s nach einer eigenen Schaltung zählen nicht.
 - **Normalzustand:** Änderungen im Modus Manuell (Helligkeit, Farbtemperatur, RGB, WLED-Effekt) werden pro Lampe gemerkt und beim nächsten Manuell wiederhergestellt. Lampen, die dabei aus waren, bleiben aus.

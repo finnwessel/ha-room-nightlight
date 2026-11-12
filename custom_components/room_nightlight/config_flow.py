@@ -16,6 +16,7 @@ from .const import (
     CONF_AUTO_BRIGHTNESS,
     CONF_AUTO_KELVIN,
     CONF_AUTO_OFF_DELAY,
+    CONF_BUTTON_BRIGHTNESS,
     CONF_BUTTON_COMMAND,
     CONF_BUTTON_IEEE,
     CONF_ILLUMINANCE,
@@ -34,7 +35,7 @@ from .const import (
     DOMAIN,
 )
 
-OPTIONAL_KEYS = (CONF_LIGHTS, CONF_ILLUMINANCE, CONF_QUIET, CONF_NIGHT_ENTITY, CONF_BUTTON_IEEE)
+OPTIONAL_KEYS = (CONF_LIGHTS, CONF_ILLUMINANCE, CONF_QUIET, CONF_NIGHT_ENTITY, CONF_BUTTON_IEEE, CONF_BUTTON_BRIGHTNESS)
 
 
 def _number(minimum: float, maximum: float, step: float, unit: str | None = None) -> selector.NumberSelector:
@@ -91,6 +92,7 @@ def _schema(defaults: dict[str, Any], with_name: bool) -> vol.Schema:
         opt(CONF_NIGHT_ENTITY): _entities(["input_boolean", "binary_sensor", "schedule"]),
         opt(CONF_BUTTON_IEEE): str,
         req(CONF_BUTTON_COMMAND): str,
+        opt(CONF_BUTTON_BRIGHTNESS): _number(1, 100, 1, "%"),
         req(CONF_TRANSITION): _number(0, 10, 0.5, "s"),
     }
     return vol.Schema(fields)

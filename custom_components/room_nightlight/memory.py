@@ -48,10 +48,13 @@ def restore_calls(
     lights: list[str],
     effect_lists: dict[str, list[str]],
     transition: float,
+    brightness: int | None = None,
 ) -> list[tuple[str, str, dict[str, Any]]]:
     """Service calls (service, entity_id, data) that restore the saved state.
 
     Without anything saved yet, every light goes to 100 % / 2700 K.
+    ``brightness`` replaces the saved brightness of the lights that go on
+    (colour, colour temperature and effect stay as saved).
     """
     calls: list[tuple[str, str, dict[str, Any]]] = []
     for entity_id in lights:
@@ -66,6 +69,8 @@ def restore_calls(
                 data["color_temp_kelvin"] = value["color_temp_kelvin"]
             elif "rgb_color" in value:
                 data["rgb_color"] = value["rgb_color"]
+        if brightness is not None:
+            data["brightness"] = brightness
         effect = (value or {}).get("effect")
         if effect:
             data["effect"] = effect
