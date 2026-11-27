@@ -38,6 +38,7 @@ from .const import (
     CONF_LUX_THRESHOLD,
     CONF_NAME,
     CONF_NIGHT_BRIGHTNESS,
+    CONF_NIGHT_COLOR,
     CONF_NIGHT_ENTITY,
     CONF_NIGHT_KELVIN,
     CONF_NIGHT_OFF_DELAY,
@@ -94,6 +95,9 @@ class RoomLightController:
         )
         self.night_brightness = percent_to_brightness(float(opt[CONF_NIGHT_BRIGHTNESS]))
         self.night_kelvin = int(opt[CONF_NIGHT_KELVIN])
+        self.night_rgb: list[int] | None = (
+            [int(c) for c in opt[CONF_NIGHT_COLOR]] if opt.get(CONF_NIGHT_COLOR) else None
+        )
         self.auto_brightness = percent_to_brightness(float(opt[CONF_AUTO_BRIGHTNESS]))
         self.auto_kelvin = int(opt[CONF_AUTO_KELVIN])
         self.night_off_delay = float(opt[CONF_NIGHT_OFF_DELAY]) * 60
@@ -296,7 +300,9 @@ class RoomLightController:
             for eid in self.lights
         }
         if action is Action.NIGHT_ON:
-            calls = level_calls(self.lights, self.night_brightness, self.night_kelvin, effects, self.transition)
+            calls = level_calls(
+                self.lights, self.night_brightness, self.night_kelvin, effects, self.transition, self.night_rgb
+            )
         elif action is Action.AUTO_ON:
             calls = level_calls(self.lights, self.auto_brightness, self.auto_kelvin, effects, self.transition)
         elif action is Action.RESTORE:

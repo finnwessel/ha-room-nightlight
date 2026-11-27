@@ -11,6 +11,7 @@
           "occupancy_sensors": "Motion / presence sensors",
           "night_brightness": "Night light brightness",
           "night_kelvin": "Night light color temperature",
+          "night_color": "Night light color (optional)",
           "night_off_delay": "Night light off after",
           "illuminance_sensor": "Illuminance sensor (optional)",
           "lux_threshold": "Dark below",
@@ -34,7 +35,8 @@
           "night_entity": "While on, it counts as night (night light). Empty = after sunset. With a switch, the evening gets the auto brightness.",
           "button_ieee": "e.g. 00:17:88:01:0e:d5:1f:ec – the button toggles night light / normal / off.",
           "button_command": "ZHA command of the button, e.g. off_press.",
-          "button_brightness": "Fixed brightness when the button switches the light on. Empty = restore the last normal state."
+          "button_brightness": "Fixed brightness when the button switches the light on. Empty = restore the last normal state.",
+          "night_color": "Instead of the color temperature, e.g. a soft red. Empty = color temperature."
         }
       }
     },
@@ -56,6 +58,7 @@
           "occupancy_sensors": "Motion / presence sensors",
           "night_brightness": "Night light brightness",
           "night_kelvin": "Night light color temperature",
+          "night_color": "Night light color (optional)",
           "night_off_delay": "Night light off after",
           "illuminance_sensor": "Illuminance sensor (optional)",
           "lux_threshold": "Dark below",
@@ -79,7 +82,8 @@
           "night_entity": "While on, it counts as night (night light). Empty = after sunset. With a switch, the evening gets the auto brightness.",
           "button_ieee": "e.g. 00:17:88:01:0e:d5:1f:ec – the button toggles night light / normal / off.",
           "button_command": "ZHA command of the button, e.g. off_press.",
-          "button_brightness": "Fixed brightness when the button switches the light on. Empty = restore the last normal state."
+          "button_brightness": "Fixed brightness when the button switches the light on. Empty = restore the last normal state.",
+          "night_color": "Instead of the color temperature, e.g. a soft red. Empty = color temperature."
         }
       }
     },

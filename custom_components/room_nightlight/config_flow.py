@@ -25,6 +25,7 @@ from .const import (
     CONF_LUX_THRESHOLD,
     CONF_NAME,
     CONF_NIGHT_BRIGHTNESS,
+    CONF_NIGHT_COLOR,
     CONF_NIGHT_ENTITY,
     CONF_NIGHT_KELVIN,
     CONF_NIGHT_OFF_DELAY,
@@ -35,7 +36,7 @@ from .const import (
     DOMAIN,
 )
 
-OPTIONAL_KEYS = (CONF_LIGHTS, CONF_ILLUMINANCE, CONF_QUIET, CONF_NIGHT_ENTITY, CONF_BUTTON_IEEE, CONF_BUTTON_BRIGHTNESS)
+OPTIONAL_KEYS = (CONF_LIGHTS, CONF_ILLUMINANCE, CONF_QUIET, CONF_NIGHT_ENTITY, CONF_BUTTON_IEEE, CONF_BUTTON_BRIGHTNESS, CONF_NIGHT_COLOR)
 
 
 def _number(minimum: float, maximum: float, step: float, unit: str | None = None) -> selector.NumberSelector:
@@ -82,6 +83,7 @@ def _schema(defaults: dict[str, Any], with_name: bool) -> vol.Schema:
         ),
         req(CONF_NIGHT_BRIGHTNESS): _number(0.1, 100, 0.1, "%"),
         req(CONF_NIGHT_KELVIN): _number(2000, 6500, 100, "K"),
+        opt(CONF_NIGHT_COLOR): selector.ColorRGBSelector(),
         req(CONF_NIGHT_OFF_DELAY): _number(0.5, 60, 0.5, "min"),
         opt(CONF_ILLUMINANCE): _entities("sensor", SensorDeviceClass.ILLUMINANCE),
         req(CONF_LUX_THRESHOLD): _number(0, 2000, 1, "lx"),

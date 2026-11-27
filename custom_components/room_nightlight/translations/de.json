@@ -11,6 +11,7 @@
           "occupancy_sensors": "Bewegungs-/Präsenzmelder",
           "night_brightness": "Nachtlicht-Helligkeit",
           "night_kelvin": "Nachtlicht-Farbtemperatur",
+          "night_color": "Nachtlicht-Farbe (optional)",
           "night_off_delay": "Nachtlicht aus nach",
           "illuminance_sensor": "Helligkeitssensor (optional)",
           "lux_threshold": "Dunkel unter",
@@ -34,7 +35,8 @@
           "night_entity": "Solange an, gilt es als Nacht (Nachtlicht). Leer = nach Sonnenuntergang. Mit Schalter bekommt der Abend die Automatik-Helligkeit.",
           "button_ieee": "z. B. 00:17:88:01:0e:d5:1f:ec – die Taste schaltet Nachtlicht / Normal / Aus.",
           "button_command": "ZHA-Befehl der Taste, z. B. off_press.",
-          "button_brightness": "Feste Helligkeit, wenn die Taste das Licht einschaltet. Leer = letzten Normalzustand wiederherstellen."
+          "button_brightness": "Feste Helligkeit, wenn die Taste das Licht einschaltet. Leer = letzten Normalzustand wiederherstellen.",
+          "night_color": "Statt der Farbtemperatur, z. B. ein sanftes Rot. Leer = Farbtemperatur."
         }
       }
     },
@@ -56,6 +58,7 @@
           "occupancy_sensors": "Bewegungs-/Präsenzmelder",
           "night_brightness": "Nachtlicht-Helligkeit",
           "night_kelvin": "Nachtlicht-Farbtemperatur",
+          "night_color": "Nachtlicht-Farbe (optional)",
           "night_off_delay": "Nachtlicht aus nach",
           "illuminance_sensor": "Helligkeitssensor (optional)",
           "lux_threshold": "Dunkel unter",
@@ -79,7 +82,8 @@
           "night_entity": "Solange an, gilt es als Nacht (Nachtlicht). Leer = nach Sonnenuntergang. Mit Schalter bekommt der Abend die Automatik-Helligkeit.",
           "button_ieee": "z. B. 00:17:88:01:0e:d5:1f:ec – die Taste schaltet Nachtlicht / Normal / Aus.",
           "button_command": "ZHA-Befehl der Taste, z. B. off_press.",
-          "button_brightness": "Feste Helligkeit, wenn die Taste das Licht einschaltet. Leer = letzten Normalzustand wiederherstellen."
+          "button_brightness": "Feste Helligkeit, wenn die Taste das Licht einschaltet. Leer = letzten Normalzustand wiederherstellen.",
+          "night_color": "Statt der Farbtemperatur, z. B. ein sanftes Rot. Leer = Farbtemperatur."
         }
       }
     },
