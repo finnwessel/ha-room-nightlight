@@ -86,11 +86,19 @@ def level_calls(
     kelvin: int,
     effect_lists: dict[str, list[str]],
     transition: float,
+    rgb_color: list[int] | None = None,
 ) -> list[tuple[str, str, dict[str, Any]]]:
-    """Service calls for a fixed level (night light, auto light)."""
+    """Service calls for a fixed level (night light, auto light).
+
+    With ``rgb_color`` the lights get that colour instead of ``kelvin``.
+    """
     calls = []
     for entity_id in lights:
-        data: dict[str, Any] = {"brightness": brightness, "color_temp_kelvin": kelvin}
+        data: dict[str, Any] = {"brightness": brightness}
+        if rgb_color:
+            data["rgb_color"] = list(rgb_color)
+        else:
+            data["color_temp_kelvin"] = kelvin
         if "Solid" in effect_lists.get(entity_id, []):
             data["effect"] = "Solid"
         calls.append(("turn_on", entity_id, _with_transition(data, transition)))

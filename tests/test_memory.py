@@ -83,3 +83,11 @@ def test_restore_calls_with_fixed_brightness():
         ("turn_off", WLED, {}),
     ]
     assert restore_calls({}, [DESK], {}, 0, brightness=128)[0][2]["brightness"] == 128
+
+
+def test_level_calls_with_night_color():
+    calls = level_calls([DESK, WLED], 110, 2700, EFFECTS, 0, rgb_color=[226, 171, 255])
+    assert calls == [
+        ("turn_on", DESK, {"brightness": 110, "rgb_color": [226, 171, 255]}),
+        ("turn_on", WLED, {"brightness": 110, "rgb_color": [226, 171, 255], "effect": "Solid"}),
+    ]
